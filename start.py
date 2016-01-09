@@ -22,7 +22,7 @@ def startProcess(videoType, downloadAmount):
     if videoType:
         if videoType == 'movie':
             mediaPath = moviePath
-        elif videoType = 'show':
+        elif videoType == 'show':
             mediaPath = showPath
         break
     downloadPath = downloadPath+'/'+videoType+'s'
