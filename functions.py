@@ -107,7 +107,7 @@ def checkDuplicates(mediaPath, recyclePath, fileName):
         # cycle through files in media
         for file in glob.glob('*'):
             # match download and media files
-            if downloadFile = file:
+            if downloadFile is file:
                 print('[Duplicate found: '+file+']')
                 os.system('mv '+file+' '+recyclePath)
                 break
