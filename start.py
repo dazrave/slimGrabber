@@ -14,13 +14,15 @@ if moviePath == False:
     moviePath = mainPath+'/movies'
 if showPath == False:
     showPath = mainPath+'/shows'
+if showPath == False:
+    showPath = mainPath+'/recycle'
 
 def startProcess(videoType, downloadAmount):
     # Set varibles needed
     if videoType:
         if videoType == 'movie':
             mediaPath = moviePath
-        else if videoType = 'show':
+        elif videoType = 'show':
             mediaPath = showPath
         break
     downloadPath = downloadPath+'/'+videoType+'s'
