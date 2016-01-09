@@ -31,7 +31,6 @@ def startProcess(videoType, downloadAmount):
             mediaPath = moviePath
         elif videoType is 'show':
             mediaPath = showPath
-        break
     downloadPath = downloadPath+'/'+videoType+'s'
     # Count the number of links avalible to download
     linkAmount = functions.countLinks(videoType)
