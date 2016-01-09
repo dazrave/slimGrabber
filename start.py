@@ -25,6 +25,7 @@ if showPath is False:
 
 
 def startProcess(videoType, downloadAmount):
+    print('[Process started]')
     # Set varibles needed
     if videoType:
         if videoType is 'movie':
@@ -39,9 +40,11 @@ def startProcess(videoType, downloadAmount):
         downloadAmount = linkAmount
     # Loop over downloadable links
     while True:
+        print('[Download started]')
         functions.downloadFile(videoType)
         processedAmount = processedAmount + 1
         if processedAmount is downloadAmount:
+            print('[Done]')
             break
     # unzip downloaded files
     functions.unzipFile(videoType, downloadPath)
@@ -51,6 +54,7 @@ def startProcess(videoType, downloadAmount):
     functions.moveFiles(downloadPath, recyclePath)
     # move downloaded videos
     # record to logs
+    print('[End]')
     break
 
 # start the correct process
