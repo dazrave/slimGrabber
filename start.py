@@ -11,9 +11,8 @@ import config
 import functions
 
 # get manual settings
-if sys.argv[1]:
+if len(sys.argv) > 0:
     videoType = sys.argv[1]
-if sys.argv[2]:
     downloadAmount = sys.argv[2]
 
 # get auto settings
