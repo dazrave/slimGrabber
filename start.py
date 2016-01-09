@@ -55,7 +55,6 @@ def startProcess(videoType, downloadAmount):
     # move downloaded videos
     # record to logs
     print('[End]')
-    break
 
 # start the correct process
 if videoType:
