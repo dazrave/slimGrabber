@@ -1,8 +1,14 @@
 # global imports
-import time, os, glob, os.path, shutil, sys
+import time
+import os
+import glob
+import os.path
+import shutil
+import sys
 
-# imports
-import config, functions
+# custom imports
+import config
+import functions
 
 # get manual settings
 videoType = sys.argv[1]
@@ -10,32 +16,33 @@ downloadAmount = sys.argv[2]
 
 # get auto settings
 downloadPath = mainPath+'/downloads'
-if moviePath == False:
+if moviePath is False:
     moviePath = mainPath+'/movies'
-if showPath == False:
+if showPath is False:
     showPath = mainPath+'/shows'
-if showPath == False:
+if showPath is False:
     showPath = mainPath+'/recycle'
+
 
 def startProcess(videoType, downloadAmount):
     # Set varibles needed
     if videoType:
-        if videoType == 'movie':
+        if videoType is 'movie':
             mediaPath = moviePath
-        elif videoType == 'show':
+        elif videoType is 'show':
             mediaPath = showPath
         break
     downloadPath = downloadPath+'/'+videoType+'s'
     # Count the number of links avalible to download
     linkAmount = functions.countLinks(videoType)
     # Make sure everything is downloaded if no manual amount set
-    if downloadAmount == False
+    if downloadAmount is False:
         downloadAmount = linkAmount
     # Loop over downloadable links
     while True:
         functions.downloadFile(videoType)
         processedAmount = processedAmount + 1
-        if processedAmount == downloadAmount:
+        if processedAmount is downloadAmount:
             break
     # unzip downloaded files
     functions.unzipFile(videoType, downloadPath)

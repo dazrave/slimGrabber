@@ -1,59 +1,72 @@
 # global imports
-import time, os, glob, os.path, shutil, sys
+import time
+import os
+import glob
+import os.path
+import shutil
+import sys
 
 # imports
 import config
 
 # Link checking
-def countLinks (videoType):
+
+
+def countLinks(videoType):
     with open(downloadPath+'/'+videoType+'s.txt') as f:
-        print ('[Checking '+videoType+' links]')
+        print('[Checking '+videoType+' links]')
         return sum(1 for _ in f)
     break
 
 # Link checking
-def checkLinks (videoType):
+
+
+def checkLinks(videoType):
     linkNumber = countLinks(videoType)
     if linkNumber > 0:
         linkCheck = True
     else:
-        print ('[No '+videoType+' links detected]')
+        print('[No '+videoType+' links detected]')
         linkCheck = False
     return linkCheck
     break
 
 # Get download link
-def getLink (videoType):
+
+
+def getLink(videoType):
     link = checkLinks(downloadPath, videoType)
     if link:
-        print ('[Grabbing '+videoType+' link]')
+        print('[Grabbing '+videoType+' link]')
         with open(downloadPath+'/'+videoType+'s.txt', 'r') as f:
             return f.readline()
     else:
         return False
     break
 
-def downloadFile (videoType):
+
+def downloadFile(videoType):
     downloadLink = getLink(downloadPath, videoType)
     if downloadLink:
-        print ('[Downloading '+videoType+']')
+        print('[Downloading '+videoType+']')
         os.system('plowdown '+downloadLink)
         return True
     else:
         return False
     break
 
-def unzipFile (videoType, downloadPath):
+
+def unzipFile(videoType, downloadPath):
     # Navigation
     os.chdir(downloadPath)
     # find rar files
     if glob.glob("*.rar"):
         rarExists = True
     else:
-        print ('[No files to unpack]')
+        print('[No files to unpack]')
     if rarExists:
-        for file in glob.glob('*.rar'): # cycle through found rar files
-            print ('[Unpacking: '+file+']')
+        for file in glob.glob('*.rar'):  # cycle through found rar files
+            print('[Unpacking: '+file+']')
             # reset temp variables
             folderAmount = 0
             fileAmount = 0
@@ -70,19 +83,21 @@ def unzipFile (videoType, downloadPath):
                     newFolderAmount += len(dirs)
                     newFileAmount += len(files)
             if newfileAmount > fileAmount:
-                os.system('rm '+file) # Delete .rar
-                print ('[Deleting: '+file+']')
+                os.system('rm '+file)  # Delete .rar
+                print('[Deleting: '+file+']')
     break
 
-def renameFiles (downloadPath):
+
+def renameFiles(downloadPath):
     # Navigation
     os.chdir(downloadPath)
     # Scan and rename
-    print ('[Renaming video files]')
-    filebot -rename -non-strict 'filepath'
+    print('[Renaming video files]')
+    os.system('filebot -rename -non-strict '+filepath)
     break
 
-def checkDuplicates (mediaPath, recyclePath, fileName):
+
+def checkDuplicates(mediaPath, recyclePath, fileName):
     # Navigation
     os.chdir(downloadPath)
     # cycle through files in downloads
@@ -92,14 +107,14 @@ def checkDuplicates (mediaPath, recyclePath, fileName):
         # cycle through files in media
         for file in glob.glob('*'):
             # match download and media files
-            if downloadFile = file
-                print ('[Duplicate found: '+file+']')
+            if downloadFile = file:
+                print('[Duplicate found: '+file+']')
                 os.system('mv '+file+' '+recyclePath)
                 break
             break
 
 
-def moveFiles (videoType, downloadPath, mediaPath):
+def moveFiles(videoType, downloadPath, mediaPath):
     # Navigation
     os.chdir(downloadPath)
     # supported extentions
@@ -111,8 +126,7 @@ def moveFiles (videoType, downloadPath, mediaPath):
             ext = os.path.splitext(file)[-1].lower()
             # if extention is valid
             if ext in extensions:
-                print ('[Moving file: '+file+']')
+                print('[Moving file: '+file+']')
                 os.system('mv '+file+' '+mediaPath)
                 break
             break
-
