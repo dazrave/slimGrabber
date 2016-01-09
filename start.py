@@ -11,8 +11,10 @@ import config
 import functions
 
 # get manual settings
-videoType = sys.argv[1]
-downloadAmount = sys.argv[2]
+if sys.argv[1]:
+    videoType = sys.argv[1]
+if sys.argv[2]:
+    downloadAmount = sys.argv[2]
 
 # get auto settings
 downloadPath = mainPath+'/downloads'
