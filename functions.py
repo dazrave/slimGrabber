@@ -16,7 +16,6 @@ def countLinks(videoType):
     with open(downloadPath+'/'+videoType+'s.txt') as f:
         print('[Checking '+videoType+' links]')
         return sum(1 for _ in f)
-    break
 
 # Link checking
 
@@ -29,7 +28,6 @@ def checkLinks(videoType):
         print('[No '+videoType+' links detected]')
         linkCheck = False
     return linkCheck
-    break
 
 # Get download link
 
@@ -42,7 +40,6 @@ def getLink(videoType):
             return f.readline()
     else:
         return False
-    break
 
 
 def downloadFile(videoType):
@@ -53,7 +50,6 @@ def downloadFile(videoType):
         return True
     else:
         return False
-    break
 
 
 def unzipFile(videoType, downloadPath):
@@ -85,7 +81,6 @@ def unzipFile(videoType, downloadPath):
             if newfileAmount > fileAmount:
                 os.system('rm '+file)  # Delete .rar
                 print('[Deleting: '+file+']')
-    break
 
 
 def renameFiles(downloadPath):
@@ -94,8 +89,6 @@ def renameFiles(downloadPath):
     # Scan and rename
     print('[Renaming video files]')
     os.system('filebot -rename -non-strict '+filepath)
-    break
-
 
 def checkDuplicates(mediaPath, recyclePath, fileName):
     # Navigation
@@ -110,8 +103,6 @@ def checkDuplicates(mediaPath, recyclePath, fileName):
             if downloadFile is file:
                 print('[Duplicate found: '+file+']')
                 os.system('mv '+file+' '+recyclePath)
-                break
-            break
 
 
 def moveFiles(videoType, downloadPath, mediaPath):
@@ -128,5 +119,3 @@ def moveFiles(videoType, downloadPath, mediaPath):
             if ext in extensions:
                 print('[Moving file: '+file+']')
                 os.system('mv '+file+' '+mediaPath)
-                break
-            break
