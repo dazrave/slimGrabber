@@ -1,3 +1,4 @@
+#!/bin/bash
 # global imports
 import time
 import os
@@ -6,15 +7,20 @@ import os.path
 import shutil
 import sys
 
-# imports
+# custom imports
 import config
+
+from config import mainPath, moviePath, showPath
+from config import recyclePath, rgUser, rgPass, fileBot
+config = [mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot]
 
 # Link checking
 
 
 def countLinks(videoType):
+    from config import mainPath
+    downloadPath = mainPath+'/downloads'
     with open(downloadPath+'/'+videoType+'s.txt') as f:
-        print('[Checking '+videoType+' links]')
         return sum(1 for _ in f)
 
 # Link checking
@@ -33,7 +39,9 @@ def checkLinks(videoType):
 
 
 def getLink(videoType):
-    link = checkLinks(downloadPath, videoType)
+    from config import mainPath
+    link = checkLinks(videoType)
+    downloadPath = mainPath+'/downloads'
     if link:
         print('[Grabbing '+videoType+' link]')
         with open(downloadPath+'/'+videoType+'s.txt', 'r') as f:
@@ -42,11 +50,21 @@ def getLink(videoType):
         return False
 
 
-def downloadFile(videoType):
-    downloadLink = getLink(downloadPath, videoType)
+def downloadFile(videoType, downloadPath, mainPath):
+    downloadLink = getLink(videoType)
+    os.chdir(downloadPath)
     if downloadLink:
         print('[Downloading '+videoType+']')
         os.system('plowdown '+downloadLink)
+        with open(mainPath+'/downloads/done.txt', 'a') as myfile:
+            myfile.write(downloadLink)
+            print ('[Writing link to logs]')
+        logFile = downloadPath+'.txt'
+        with open(logFile, 'r') as fin:
+            data = fin.read().splitlines(True)
+        with open(logFile, 'w') as fout:
+            fout.writelines(data[1:])
+            print ('[Removing link from download list]')
         return True
     else:
         return False
@@ -59,53 +77,57 @@ def unzipFile(videoType, downloadPath):
     if glob.glob("*.rar"):
         rarExists = True
     else:
+        rarExists = False
         print('[No files to unpack]')
     if rarExists:
         for file in glob.glob('*.rar'):  # cycle through found rar files
             print('[Unpacking: '+file+']')
-            # reset temp variables
-            folderAmount = 0
-            fileAmount = 0
-            newfolderAmount = 0
-            newfileAmount = 0
-            # count all files in folders
-            for _, dirs, files in os.walk(dir_to_list_recursively):
-                folderAmount += len(dirs)
-                fileAmount += len(files)
-            # Unpack rar file
             os.system('filebot -extract '+file)
             # re-count all files in folders
-            for _, dirs, files in os.walk(dir_to_list_recursively):
-                    newFolderAmount += len(dirs)
-                    newFileAmount += len(files)
-            if newfileAmount > fileAmount:
-                os.system('rm '+file)  # Delete .rar
-                print('[Deleting: '+file+']')
+            os.system('rm '+file)  # Delete .rar
+            print('[Deleting: '+file+']')
+    return rarExists
 
 
-def renameFiles(downloadPath):
+def renameFile(downloadPath):
     # Navigation
     os.chdir(downloadPath)
+    # Find all videos and move into main directory
+    extensions = ('.mp4', '.avi', '.wmv', '.mkv')
+    # search through folder
+    for file in glob.glob('*'):
+        folderName = file
+        if os.path.isdir(folderName):
+            os.chdir(downloadPath+'/'+folderName)
+            for file in glob.glob('*'):
+                fileName = file
+                ext = os.path.splitext(fileName)[-1].lower()
+                if ext in extensions:
+                        print('[Moving: '+fileName+']')
+                        os.rename(downloadPath+'/'+folderName+'/'+fileName, downloadPath+'/'+fileName)
+                        # delete empty folder
+                        # shutil.rmtree(fileName)
+            os.chdir(downloadPath)
+            shutil.rmtree(downloadPath+'/'+folderName)
     # Scan and rename
     print('[Renaming video files]')
-    os.system('filebot -rename -non-strict '+filepath)
+    os.system('filebot -rename -non-strict '+downloadPath)
 
-def checkDuplicates(mediaPath, recyclePath, fileName):
+
+def checkDuplicates(downloadPath, mediaPath, recyclePath):
     # Navigation
     os.chdir(downloadPath)
     # cycle through files in downloads
+    print('[Checking for duplicates]')
     for file in glob.glob('*'):
-        downloadFile = file
+        downloadedFile = file
         os.chdir(mediaPath)
-        # cycle through files in media
-        for file in glob.glob('*'):
-            # match download and media files
-            if downloadFile is file:
-                print('[Duplicate found: '+file+']')
-                os.system('mv '+file+' '+recyclePath)
+        for file in glob.glob(downloadedFile):
+            os.rename(mediaPath+'/'+file, recyclePath+'/'+file)
 
 
-def moveFiles(videoType, downloadPath, mediaPath):
+def moveFiles (downloadPath, mediaPath, recyclePath):
+    checkDuplicates(downloadPath, mediaPath, recyclePath)
     # Navigation
     os.chdir(downloadPath)
     # supported extentions
@@ -118,4 +140,4 @@ def moveFiles(videoType, downloadPath, mediaPath):
             # if extention is valid
             if ext in extensions:
                 print('[Moving file: '+file+']')
-                os.system('mv '+file+' '+mediaPath)
+                os.rename(downloadPath+'/'+file, mediaPath+'/'+file)

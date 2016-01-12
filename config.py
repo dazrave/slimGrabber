@@ -16,4 +16,4 @@ rgUser = ''  # Username/email
 rgPass = ''  # Password
 
 # Turn auto file renaming on/off
-filebot = True  # True = on / False = off (must have capital letter)
+fileBot = True  # True = on / False = off (must have capital letter)
