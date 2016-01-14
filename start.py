@@ -10,7 +10,7 @@ import sys
 import config
 import functions
 
-from config import mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot
+from config import mainPath, moviePath, showPath, filePath, recyclePath, rgUser, rgPass, fileBot
 config = [mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot]
 
 # get manual settings
@@ -21,39 +21,43 @@ timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
 
 
 #while len(sys.argv) > i:
-    #videoType = sys.argv[1]
+    #fileType = sys.argv[1]
     #i = i + 1
     #if i > 1:
     #    downloadAmount = sys.argv[2]
-videoType = False
+fileType = False
 downloadAmount = False
 
 
-def startProcess(videoType, downloadAmount, config):
+def startProcess(fileType, downloadAmount, config):
     #setup
     mainPath = config[0]
     moviePath = config[1]
     showPath = config[2]
     recyclePath = config[3]
     # get auto settings
-    downloadPath = mainPath+'/downloads/'+videoType+'s'
+    downloadPath = mainPath+'/downloads/'+fileType+'s'
     if moviePath is '':
         moviePath = mainPath+'/movies'
     if showPath is '':
         showPath = mainPath+'/shows'
+    if filePath is '':
+        filePath = mainPath+'/files'
     if recyclePath is '':
-        recyclePath = mainPath+'/recycle/'+videoType+'s'
+        recyclePath = mainPath+'/recycle/'+fileType+'s'
     os.makedirs(downloadPath)
     # Start process
     print('[Process started]')
     # Set varibles needed
-    if videoType is 'movie':
+    if fileType is 'movie':
         mediaPath = moviePath
-    elif videoType is 'show':
+    elif fileType is 'show':
         mediaPath = showPath
+    elif fileType is 'file':
+        mediaPath = filePath
     # Count the number of links avalible to download
-    print('[Checking '+videoType+' links]')
-    linkAmount = functions.countLinks(videoType)
+    print('[Checking '+fileType+' links]')
+    linkAmount = functions.countLinks(fileType)
     # Make sure everything is downloaded if no manual amount set
     if downloadAmount is False:
         downloadAmount = linkAmount
@@ -61,7 +65,7 @@ def startProcess(videoType, downloadAmount, config):
     processedAmount = 0
     while True:
         # print('[Download started]')
-        downloadProcess = functions.downloadFile(videoType, downloadPath, mainPath)
+        downloadProcess = functions.downloadFile(fileType, downloadPath, mainPath)
         processedAmount = processedAmount + 1
         #  print ('[ '+processedAmount ' of ' linkAmount ' downloaded]')
         if processedAmount is downloadAmount:
@@ -69,16 +73,17 @@ def startProcess(videoType, downloadAmount, config):
             break
         if downloadProcess is False:
             break
-    # unzip downloaded files
-    rarExists = functions.unzipFile(videoType, downloadPath)
-    # format filenames
-    functions.renameFile(downloadPath)
+    if fileType is not 'file':
+        # unzip downloaded files
+        rarExists = functions.unzipFile(fileType, downloadPath)
+        # format filenames
+        functions.renameFile(downloadPath)
     # check for duplicates
     functions.moveFiles(downloadPath, mediaPath, recyclePath)
     # move downloaded videos
     # record to logs
     shutil.rmtree(downloadPath)
-    print('[End of '+videoType+'s]')
+    print('[End of '+fileType+'s]')
 
 # Add Timestamp to 'done.txt'
 timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
@@ -88,11 +93,12 @@ with open(mainPath+'/downloads/done.txt', 'a') as myfile:
     myfile.write('====== '+timeStamp+' ======\n')
 
 # start the correct process
-if videoType:
-    downloadResult = startProcess(videoType, downloadAmount, config)
+if fileType:
+    downloadResult = startProcess(fileType, downloadAmount, config)
 else:
     showResult = startProcess('show', downloadAmount, config)
     movieResult = startProcess('movie', downloadAmount, config)
+    fileResult = startProcess('file', downloadAmount, config)
 
 # Add Timestamp to 'done.txt'
 timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')

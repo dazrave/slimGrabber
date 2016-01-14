@@ -17,44 +17,44 @@ config = [mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot]
 # Link checking
 
 
-def countLinks(videoType):
+def countLinks(fileType):
     from config import mainPath
     downloadPath = mainPath+'/downloads'
-    with open(downloadPath+'/'+videoType+'s.txt') as f:
+    with open(downloadPath+'/'+fileType+'s.txt') as f:
         return sum(1 for _ in f)
 
 # Link checking
 
 
-def checkLinks(videoType):
-    linkNumber = countLinks(videoType)
+def checkLinks(fileType):
+    linkNumber = countLinks(fileType)
     if linkNumber > 0:
         linkCheck = True
     else:
-        print('[No '+videoType+' links detected]')
+        print('[No '+fileType+' links detected]')
         linkCheck = False
     return linkCheck
 
 # Get download link
 
 
-def getLink(videoType):
+def getLink(fileType):
     from config import mainPath
-    link = checkLinks(videoType)
+    link = checkLinks(fileType)
     downloadPath = mainPath+'/downloads'
     if link:
-        print('[Grabbing '+videoType+' link]')
-        with open(downloadPath+'/'+videoType+'s.txt', 'r') as f:
+        print('[Grabbing '+fileType+' link]')
+        with open(downloadPath+'/'+fileType+'s.txt', 'r') as f:
             return f.readline()
     else:
         return False
 
 
-def downloadFile(videoType, downloadPath, mainPath):
-    downloadLink = getLink(videoType)
+def downloadFile(fileType, downloadPath, mainPath):
+    downloadLink = getLink(fileType)
     os.chdir(downloadPath)
     if downloadLink:
-        print('[Downloading '+videoType+']')
+        print('[Downloading '+fileType+']')
         os.system('plowdown '+downloadLink)
         with open(mainPath+'/downloads/done.txt', 'a') as myfile:
             myfile.write(downloadLink)
@@ -70,7 +70,7 @@ def downloadFile(videoType, downloadPath, mainPath):
         return False
 
 
-def unzipFile(videoType, downloadPath):
+def unzipFile(fileType, downloadPath):
     # Navigation
     os.chdir(downloadPath)
     # find rar files
