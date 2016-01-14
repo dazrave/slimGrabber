@@ -48,6 +48,11 @@ def startProcess(fileType, downloadAmount, config):
         recyclePath = mainPath+'/recycle/'+fileType+'s'
 
     tempFolder = os.path.exists(downloadPath)
+
+    print (tempFolder)
+    print ('----------')
+    print (downloadPath)
+
     if tempFolder:
         timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
         os.rename(downloadPath, mainPath+'/downloads/'+fileType+'s_'+timeStamp)
