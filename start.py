@@ -80,9 +80,9 @@ def startProcess(fileType, downloadAmount, config):
         if downloadProcess is False:
             break
     if fileType is not 'file':
+        # unzip downloaded files
+        rarExists = functions.unzipFile(fileType, downloadPath)
         if downloadProcess is not False:
-            # unzip downloaded files
-            rarExists = functions.unzipFile(fileType, downloadPath)
             # format filenames
             functions.renameFile(downloadPath)
             # check for duplicates
@@ -111,6 +111,6 @@ timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
 with open(mainPath+'/downloads/done.txt', 'a') as myfile:
     myfile.write('###### '+timeStamp+' ######\n')
 
-print ('[Finished]')
+print ('-----------------------------=[Finished]')
 
 # Was the downloading successfull?
