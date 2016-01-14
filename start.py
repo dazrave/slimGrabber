@@ -46,6 +46,11 @@ def startProcess(fileType, downloadAmount, config):
         filePath = mainPath+'/files'
     if recyclePath is '':
         recyclePath = mainPath+'/recycle/'+fileType+'s'
+
+    tempFolder = os.path.exists(downloadPath)
+    if tempFolder:
+        timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
+        os.rename(downloadPath, mainPath+'/downloads/'+fileType+'s_'+timeStamp)
     os.makedirs(downloadPath)
     # Start process
     print('[Process started]')
