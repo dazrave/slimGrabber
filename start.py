@@ -57,7 +57,9 @@ def startProcess(fileType, downloadAmount, config):
     os.makedirs(downloadPath)
     if tempFolder:
         timeStamp = time.strftime('%d%m%Y%I%M%S')
-        os.rename(fileType+'s', fileType+'s_'+timeStamp)
+        if fileType is not 'music':
+            fileType = fileType+'s'
+        os.rename(fileType, fileType+'_'+timeStamp)
     # Set varibles needed
     if fileType is 'movie':
         mediaPath = moviePath
