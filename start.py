@@ -34,7 +34,8 @@ def startProcess(fileType, downloadAmount, config):
     mainPath = config[0]
     moviePath = config[1]
     showPath = config[2]
-    recyclePath = config[3]
+    fileType = config[3]
+    recyclePath = config[4]
     # get auto settings
     downloadPath = mainPath+'/downloads/'+fileType+'s'
     if moviePath is '':
