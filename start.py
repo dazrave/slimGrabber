@@ -49,7 +49,7 @@ def startProcess(fileType, downloadAmount, config):
     tempFolder = os.path.exists(downloadPath)
     os.chdir(mainPath+'/downloads')
     if tempFolder:
-        timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
+        timeStamp = time.strftime('%d%m%Y%I%M%S')
         os.rename(fileType+'s', fileType+'s_'+timeStamp)
     os.makedirs(downloadPath)
     # Start process
