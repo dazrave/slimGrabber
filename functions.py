@@ -19,7 +19,7 @@ config = [mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot]
 
 def countLinks(fileType):
     from config import mainPath
-    if fileType is not 'music'
+    if fileType is not 'music':
         fileType = fileType+'s'
     downloadPath = mainPath+'/downloads'
     with open(downloadPath+'/'+fileType+'.txt') as f:
@@ -44,7 +44,7 @@ def getLink(fileType):
     from config import mainPath
     link = checkLinks(fileType)
     downloadPath = mainPath+'/downloads'
-    if fileType is not 'music'
+    if fileType is not 'music':
         fileType = fileType+'s'
     if link:
         print('[Grabbing '+fileType+' link]')
