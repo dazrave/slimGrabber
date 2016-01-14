@@ -43,7 +43,7 @@ def startProcess(fileType, downloadAmount, config):
     # get auto settings
     if fileType is not 'music':
         fileType = fileType+'s'
-    downloadPath = mainPath+'/downloads/'+fileType
+
     if moviePath is '':
         moviePath = mainPath+'/movies'
     if showPath is '':
@@ -53,10 +53,14 @@ def startProcess(fileType, downloadAmount, config):
     if filePath is '':
         filePath = mainPath+'/files'
     if recyclePath is '':
-        recyclePath = mainPath+'/recycle/'+fileType+'s'
+        recyclePath = mainPath+'/recycle/'+fileType
+
+    downloadPath = mainPath+'/downloads/'+fileType
+
     tempFolder = os.path.exists(downloadPath)
     os.chdir(mainPath+'/downloads')
     os.makedirs(downloadPath)
+
     if tempFolder:
         timeStamp = time.strftime('%d%m%Y%I%M%S')
         os.rename(fileType, fileType+'_'+timeStamp)
