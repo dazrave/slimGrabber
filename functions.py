@@ -123,6 +123,7 @@ def checkDuplicates(downloadPath, mediaPath, recyclePath):
         downloadedFile = file
         os.chdir(mediaPath)
         for file in glob.glob(downloadedFile):
+            print('[Duplicate Found!]')
             os.rename(mediaPath+'/'+file, recyclePath+'/'+file)
 
 
