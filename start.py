@@ -41,7 +41,9 @@ def startProcess(fileType, downloadAmount, config):
     filePath = config[4]
     recyclePath = config[5]
     # get auto settings
-    downloadPath = mainPath+'/downloads/'+fileType+'s'
+    if fileType is not 'music':
+        fileType = fileType+'s'
+    downloadPath = mainPath+'/downloads/'+fileType
     if moviePath is '':
         moviePath = mainPath+'/movies'
     if showPath is '':
@@ -57,15 +59,13 @@ def startProcess(fileType, downloadAmount, config):
     os.makedirs(downloadPath)
     if tempFolder:
         timeStamp = time.strftime('%d%m%Y%I%M%S')
-        if fileType is not 'music':
-            fileType = fileType+'s'
         os.rename(fileType, fileType+'_'+timeStamp)
     # Set varibles needed
-    if fileType is 'movie':
+    if fileType is 'movies':
         mediaPath = moviePath
-    elif fileType is 'show':
+    elif fileType is 'shows':
         mediaPath = showPath
-    elif fileType is 'file':
+    elif fileType is 'files':
         mediaPath = filePath
     elif fileType is 'music':
         musicPath = filePath
@@ -98,7 +98,7 @@ def startProcess(fileType, downloadAmount, config):
             functions.moveFiles(downloadPath, mediaPath, recyclePath)
     # record to logs
     shutil.rmtree(downloadPath)
-    print('[End of '+fileType+'s]')
+    print('[End of '+fileType+']')
 
 # Add Timestamp to 'done.txt'
 timeStamp = time.strftime('%d/%m/%Y %I:%M:%S')
