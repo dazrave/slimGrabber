@@ -11,7 +11,7 @@ import config
 import functions
 
 from config import mainPath, moviePath, showPath, filePath, recyclePath, rgUser, rgPass, fileBot
-config = [mainPath, moviePath, showPath, recyclePath, rgUser, rgPass, fileBot]
+config = [mainPath, moviePath, showPath, filePath, recyclePath, rgUser, rgPass, fileBot]
 
 # get manual settings
 i = 0
