@@ -9,6 +9,7 @@ mainPath = '/mnt/usbstorage'  # where slimGrabber is installed
 # Leave blank if using default configuration (no backslash required)
 moviePath = ''  # Where the Movie libary is located
 showPath = ''  # Where the TV show libary is located
+musicPath = ''  #
 filePath = ''  # Random files that are not for plex
 recyclePath = ''  # Where duplicate copes of files end up
 

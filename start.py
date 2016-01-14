@@ -10,8 +10,8 @@ import sys
 import config
 import functions
 
-from config import mainPath, moviePath, showPath, filePath, recyclePath, rgUser, rgPass, fileBot
-config = [mainPath, moviePath, showPath, filePath, recyclePath, rgUser, rgPass, fileBot]
+from config import mainPath, moviePath, showPath, musicPath, filePath, recyclePath, rgUser, rgPass, fileBot
+config = [mainPath, moviePath, showPath, musicPath, filePath, recyclePath, rgUser, rgPass, fileBot]
 
 # get manual settings
 i = 0
@@ -30,30 +30,34 @@ downloadAmount = False
 
 
 def startProcess(fileType, downloadAmount, config):
+
+    # Start process
+    print('-----------------------------=['+fileType+' Process started]')
     #setup
     mainPath = config[0]
     moviePath = config[1]
     showPath = config[2]
-    filePath = config[3]
-    recyclePath = config[4]
+    musicPath = config[3]
+    filePath = config[4]
+    recyclePath = config[5]
     # get auto settings
     downloadPath = mainPath+'/downloads/'+fileType+'s'
     if moviePath is '':
         moviePath = mainPath+'/movies'
     if showPath is '':
         showPath = mainPath+'/shows'
+    if musicPath is '':
+        musicPath = mainPath+'/music/Loose'
     if filePath is '':
         filePath = mainPath+'/files'
     if recyclePath is '':
         recyclePath = mainPath+'/recycle/'+fileType+'s'
     tempFolder = os.path.exists(downloadPath)
     os.chdir(mainPath+'/downloads')
+    os.makedirs(downloadPath)
     if tempFolder:
         timeStamp = time.strftime('%d%m%Y%I%M%S')
         os.rename(fileType+'s', fileType+'s_'+timeStamp)
-    os.makedirs(downloadPath)
-    # Start process
-    print('-----------------------------=['+fileType+' Process started]')
     # Set varibles needed
     if fileType is 'movie':
         mediaPath = moviePath
@@ -61,6 +65,8 @@ def startProcess(fileType, downloadAmount, config):
         mediaPath = showPath
     elif fileType is 'file':
         mediaPath = filePath
+    elif fileType is 'music':
+        musicPath = filePath
     # Count the number of links avalible to download
     print('[Checking '+fileType+' links]')
     linkAmount = functions.countLinks(fileType)
@@ -82,9 +88,10 @@ def startProcess(fileType, downloadAmount, config):
     if fileType is not 'file':
         # unzip downloaded files
         rarExists = functions.unzipFile(fileType, downloadPath)
-        if downloadProcess is not False:
-            # format filenames
-            functions.renameFile(downloadPath)
+        if fileType is not 'music':
+            if downloadProcess is not False:
+                # format filenames
+                functions.renameFile(downloadPath)
             # check for duplicates
             functions.moveFiles(downloadPath, mediaPath, recyclePath)
     # record to logs
@@ -104,6 +111,7 @@ if fileType:
 else:
     showResult = startProcess('show', downloadAmount, config)
     movieResult = startProcess('movie', downloadAmount, config)
+    musicResult = startProcess('music', downloadAmount, config)
     fileResult = startProcess('file', downloadAmount, config)
 
 # Add Timestamp to 'done.txt'
