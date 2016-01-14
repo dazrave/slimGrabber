@@ -53,7 +53,7 @@ def startProcess(fileType, downloadAmount, config):
         os.rename(fileType+'s', fileType+'s_'+timeStamp)
     os.makedirs(downloadPath)
     # Start process
-    print('[Process started]')
+    print('-----------------------------=['+fileType+' Process started]')
     # Set varibles needed
     if fileType is 'movie':
         mediaPath = moviePath
@@ -80,13 +80,13 @@ def startProcess(fileType, downloadAmount, config):
         if downloadProcess is False:
             break
     if fileType is not 'file':
-        # unzip downloaded files
-        rarExists = functions.unzipFile(fileType, downloadPath)
-        # format filenames
-        functions.renameFile(downloadPath)
-    # check for duplicates
-    functions.moveFiles(downloadPath, mediaPath, recyclePath)
-    # move downloaded videos
+        if downloadProcess is not False:
+            # unzip downloaded files
+            rarExists = functions.unzipFile(fileType, downloadPath)
+            # format filenames
+            functions.renameFile(downloadPath)
+            # check for duplicates
+            functions.moveFiles(downloadPath, mediaPath, recyclePath)
     # record to logs
     shutil.rmtree(downloadPath)
     print('[End of '+fileType+'s]')
