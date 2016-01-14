@@ -55,10 +55,10 @@ def startProcess(fileType, downloadAmount, config):
     if recyclePath is '':
         recyclePath = mainPath+'/recycle/'+fileType
     downloadPath = mainPath+'/downloads/'+fileType
+    tempFolder = os.path.exists(downloadPath)
     if tempFolder:
         timeStamp = time.strftime('%d%m%Y%I%M%S')
         os.rename(fileType, fileType+'_'+timeStamp)
-    tempFolder = os.path.exists(downloadPath)
     os.chdir(mainPath+'/downloads')
     os.makedirs(downloadPath)
     # Set varibles needed
